@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Profile Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <style>
+        /* ===== GLOBAL STYLES ===== */
+:root {
+  --primary-color: #4361ee;
+  --primary-light: #4895ef;
+  --secondary-color: #3f37c9;
+  --accent-color: #560bad;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --danger-color: #f44336;
+  --pending-color: #ff9800;
+  --active-color: #4caf50;
+  --light-bg: #f8f9fa;
+  --dark-bg: #343a40;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --text-light: #f8f9fa;
+  --border-color: #e0e0e0;
+  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.1);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+}
+
+body {
+  background-color: #f5f7fb;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style-type: none;
+}
+
+/* ===== CONTAINER LAYOUT ===== */
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ===== SIDEBAR STYLES ===== */
+.sidebar {
+  width: 280px;
+  background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+  color: var(--text-light);
+  padding: 1.5rem 1rem;
+  transition: var(--transition);
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  margin-bottom: 2rem;
+}
+
+.logo img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+.logo h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.nav-links li {
+  margin-bottom: 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.nav-links li a {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.nav-links li a i {
+  margin-right: 12px;
+  font-size: 1.1rem;
+  width: 24px;
+  text-align: center;
+}
+
+.nav-links li:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-links li.active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ===== MAIN CONTENT STYLES ===== */
+.main-content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 2rem;
+  transition: var(--transition);
+}
+
+/* Top Bar */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1rem;
+  box-shadow: var(--shadow-sm);
+  max-width: 400px;
+  width: 100%;
+}
+
+.search-box i {
+  color: var(--text-secondary);
+  margin-right: 10px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.notifications, .messages {
+  position: relative;
+  cursor: pointer;
+}
+
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: var(--danger-color);
+  color: white;
+  font-size: 0.7rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.user img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+/* Welcome Section */
+.welcome-section {
+  margin-bottom: 2rem;
+}
+
+.welcome-section h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-section p {
+  color: var(--text-secondary);
+}
+
+/* Dashboard Cards */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.card {
+  background-color: white;
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background-color: var(--primary-color);
+}
+
+.card-icon {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.card-info h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-info p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.card-link {
+  margin-top: auto;
+  color: var(--primary-color);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: var(--transition);
+}
+
+.card-link:hover {
+  color: var(--accent-color);
+}
+
+.status-active, .highlight {
+  color: var(--active-color);
+  font-weight: 500;
+}
+
+.status-pending {
+  color: var(--pending-color);
+  font-weight: 500;
+}
+
+/* Secondary Content */
+.secondary-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.resources-section, .library-section {
+  background-color: white;
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.view-all {
+  color: var(--primary-color);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.view-all:hover {
+  color: var(--accent-color);
+}
+
+/* Resource Grid */
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.resource-item {
+  background-color: var(--light-bg);
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.resource-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+
+.resource-icon {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.resource-item h4 {
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.resource-item p {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+/* Library Content */
+.library-content {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.recent-resources {
+  flex: 2;
+}
+
+.recent-resources h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.resource-list li {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.resource-list li:last-child {
+  border-bottom: none;
+}
+
+.resource-list li i {
+  font-size: 1.5rem;
+  color: var(--danger-color);
+  margin-right: 1rem;
+}
+
+.resource-details {
+  flex: 1;
+}
+
+.resource-details h4 {
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+}
+
+.resource-details p {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.download-btn {
+  color: var(--primary-color);
+  background-color: rgba(67, 97, 238, 0.1);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.download-btn:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.library-stats {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stat-card {
+  background-color: var(--light-bg);
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin-bottom: 0.3rem;
+}
+
+.stat-card p {
+  font-size: 0.9rem;
+}
+
+.small-text {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Calendar Section */
+.calendar-section {
+  background-color: white;
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 2.5rem;
+}
+
+.calendar-navigation {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.nav-btn:hover {
+  background-color: var(--light-bg);
+}
+
+.calendar-events {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.event {
+  display: flex;
+  align-items: center;
+  background-color: var(--light-bg);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  transition: var(--transition);
+}
+
+.event:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+
+.event-date {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  margin-right: 1rem;
+  min-width: 60px;
+}
+
+.event-date .day {
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: block;
+}
+
+.event-date .month {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.event-details {
+  flex: 1;
+}
+
+.event-details h4 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.event-details p {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.event-details p i {
+  margin-right: 0.5rem;
+}
+
+/* Footer */
+.dashboard-footer {
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.footer-links a {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.footer-links a:hover {
+  color: var(--primary-color);
+}
+
+.footer-copyright {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1200px) {
+  .secondary-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .sidebar {
+    width: 70px;
+    padding: 1.5rem 0.5rem;
+  }
+  
+  .sidebar.expanded {
+    width: 280px;
+  }
+  
+  .logo h2, .nav-links li a span {
+    display: none;
+  }
+
+  .sidebar.expanded .logo h2, 
+  .sidebar.expanded .nav-links li a span {
+    display: block;
+  }
+  
+  .nav-links li a {
+    justify-content: center;
+  }
+  
+  .sidebar.expanded .nav-links li a {
+    justify-content: flex-start;
+  }
+  
+  .nav-links li a i {
+    margin-right: 0;
+  }
+  
+  .sidebar.expanded .nav-links li a i {
+    margin-right: 12px;
+  }
+  
+  .main-content {
+    margin-left: 70px;
+  }
+  
+  .main-content.expanded {
+    margin-left: 280px;
+  }
+
+  .hamburger-menu {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 1rem;
+  }
+  
+  .sidebar {
+    transform: translateX(-100%);
+    z-index: 1001;
+  }
+  
+  .sidebar.expanded {
+    transform: translateX(0%);
+    width: 280px;
+  }
+  
+  .main-content.expanded {
+    margin-left: 0;
+  }
+  
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .search-box {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .user-info {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .cards-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .library-content {
+    flex-direction: column;
+  }
+}
+
+/* Additional Components */
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 20px;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+.hamburger-menu span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background-color: var(--text-primary);
+  transition: var(--transition);
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-secondary);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
+
+/* Theme Colors - Optional for customization */
+.theme-blue {
+  --primary-color: #4361ee;
+  --primary-light: #4895ef;
+  --secondary-color: #3f37c9;
+  --accent-color: #560bad;
+}
+
+.theme-green {
+  --primary-color: #38b000;
+  --primary-light: #70e000;
+  --secondary-color: #008000;
+  --accent-color: #007200;
+}
+
+.theme-purple {
+  --primary-color: #7b2cbf;
+  --primary-light: #9d4edd;
+  --secondary-color: #5a189a;
+  --accent-color: #3c096c;
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+    </style>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="logo">
+                <img src="/api/placeholder/100/100" alt="University Logo">
+                <h2>University Portal</h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active">
+                    <a href="#dashboard"><i class="fas fa-home"></i> Dashboard</a>
+                </li>
+                <li>
+                    <a href="#profile"><i class="fas fa-user"></i> Mon Profil</a>
+                </li>
+                <li>
+                    <a href="#wifi"><i class="fas fa-wifi"></i> Compte WiFi</a>
+                </li>
+                <li>
+                    <a href="#stage"><i class="fas fa-briefcase"></i> Stage de Perfectionnement</a>
+                </li>
+                <li>
+                    <a href="#prime"><i class="fas fa-award"></i> Prime de Rendement</a>
+                </li>
+                <li>
+                    <a href="#technique"><i class="fas fa-cogs"></i> Technique d'Ingénierie</a>
+                </li>
+                <li>
+                    <a href="#library"><i class="fas fa-book"></i> Bibliothèque Virtuelle</a>
+                </li>
+                <li>
+                    <a href="#settings"><i class="fas fa-cog"></i> Paramètres</a>
+                </li>
+                <li>
+                    <a href="#logout"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Navigation Bar -->
+            <div class="top-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Rechercher...">
+                </div>
+                <div class="user-info">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="messages">
+                        <i class="fas fa-envelope"></i>
+                        <span class="badge">5</span>
+                    </div>
+                    <div class="user">
+                        <img src="/api/placeholder/40/40" alt="User Profile">
+                        <span>John Doe</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1>Bienvenue, John Doe</h1>
+                <p>Tableau de bord étudiant - Faculté d'Ingénierie</p>
+            </div>
+
+            <!-- Dashboard Cards -->
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="card-info">
+                        <h3>Mon Profil</h3>
+                        <p>Informations personnelles et académiques</p>
+                    </div>
+                    <a href="#profile" class="card-link">Voir détails <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <div class="card-info">
+                        <h3>Compte WiFi</h3>
+                        <p>Statut: <span class="status-active">Actif</span></p>
+                    </div>
+                    <a href="#wifi" class="card-link">Gérer <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="card-info">
+                        <h3>Stage de Perfectionnement</h3>
+                        <p>Date limite: <span class="highlight">15 Mai 2025</span></p>
+                    </div>
+                    <a href="#stage" class="card-link">Postuler <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="card-info">
+                        <h3>Prime de Rendement</h3>
+                        <p>Éligibilité: <span class="status-pending">En attente</span></p>
+                    </div>
+                    <a href="#prime" class="card-link">Vérifier <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <!-- Secondary Content -->
+            <div class="secondary-content">
+                <!-- Technical Resources Section -->
+                <div class="resources-section">
+                    <div class="section-header">
+                        <h2>Ressources Techniques</h2>
+                        <a href="#technique" class="view-all">Voir tout <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="resources-grid">
+                        <div class="resource-item">
+                            <div class="resource-icon">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <h4>Programmation Avancée</h4>
+                            <p>15 cours disponibles</p>
+                        </div>
+                        <div class="resource-item">
+                            <div class="resource-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h4>Systèmes de Données</h4>
+                            <p>8 cours disponibles</p>
+                        </div>
+                        <div class="resource-item">
+                            <div class="resource-icon">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                            <h4>Réseaux Informatiques</h4>
+                            <p>12 cours disponibles</p>
+                        </div>
+                        <div class="resource-item">
+                            <div class="resource-icon">
+                                <i class="fas fa-microchip"></i>
+                            </div>
+                            <h4>Systèmes Embarqués</h4>
+                            <p>6 cours disponibles</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Virtual Library Section -->
+                <div class="library-section">
+                    <div class="section-header">
+                        <h2>Bibliothèque Virtuelle</h2>
+                        <a href="#library" class="view-all">Voir tout <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="library-content">
+                        <div class="recent-resources">
+                            <h3>Ressources Récentes</h3>
+                            <ul class="resource-list">
+                                <li>
+                                    <i class="fas fa-file-pdf"></i>
+                                    <div class="resource-details">
+                                        <h4>Introduction à l'Intelligence Artificielle</h4>
+                                        <p>Ajouté le 20 Avril 2025</p>
+                                    </div>
+                                    <a href="#" class="download-btn"><i class="fas fa-download"></i></a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-file-pdf"></i>
+                                    <div class="resource-details">
+                                        <h4>Systèmes Distribués: Principes et Paradigmes</h4>
+                                        <p>Ajouté le 18 Avril 2025</p>
+                                    </div>
+                                    <a href="#" class="download-btn"><i class="fas fa-download"></i></a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-file-pdf"></i>
+                                    <div class="resource-details">
+                                        <h4>Mécanique des Fluides Computationnelle</h4>
+                                        <p>Ajouté le 15 Avril 2025</p>
+                                    </div>
+                                    <a href="#" class="download-btn"><i class="fas fa-download"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="library-stats">
+                            <div class="stat-card">
+                                <h3>25</h3>
+                                <p>Livres Empruntés</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3>120</h3>
+                                <p>Articles Consultés</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3>15</h3>
+                                <p>Jours Restants</p>
+                                <span class="small-text">Prêt actuel</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Section -->
+            <div class="calendar-section">
+                <div class="section-header">
+                    <h2>Calendrier Académique</h2>
+                    <div class="calendar-navigation">
+                        <button class="nav-btn"><i class="fas fa-chevron-left"></i></button>
+                        <span>Avril 2025</span>
+                        <button class="nav-btn"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                <div class="calendar-events">
+                    <div class="event">
+                        <div class="event-date">
+                            <span class="day">25</span>
+                            <span class="month">Avr</span>
+                        </div>
+                        <div class="event-details">
+                            <h4>Remise du Projet Intégrateur</h4>
+                            <p><i class="fas fa-clock"></i> 23:59</p>
+                            <p><i class="fas fa-map-marker-alt"></i> En ligne</p>
+                        </div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">
+                            <span class="day">30</span>
+                            <span class="month">Avr</span>
+                        </div>
+                        <div class="event-details">
+                            <h4>Examen de Mécanique des Solides</h4>
+                            <p><i class="fas fa-clock"></i> 14:00 - 17:00</p>
+                            <p><i class="fas fa-map-marker-alt"></i> Salle A-300</p>
+                        </div>
+                    </div>
+                    <div class="event">
+                        <div class="event-date">
+                            <span class="day">05</span>
+                            <span class="month">Mai</span>
+                        </div>
+                        <div class="event-details">
+                            <h4>Présentation du Projet Final</h4>
+                            <p><i class="fas fa-clock"></i> 10:00 - 12:00</p>
+                            <p><i class="fas fa-map-marker-alt"></i> Amphithéâtre B</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="dashboard-footer">
+                <div class="footer-links">
+                    <a href="#">Aide</a>
+                    <a href="#">Support Technique</a>
+                    <a href="#">Confidentialité</a>
+                    <a href="#">Conditions d'utilisation</a>
+                </div>
+                <div class="footer-copyright">
+                    <p>© 2025 Université Polytechnique. Tous droits réservés.</p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="atss.js"></script>
+</body>
+</html>
