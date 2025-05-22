@@ -707,3 +707,16 @@ footer {
 .new-card {
     animation: cardEntrance 0.4s ease-out forwards;
 }
+
+.ai-choice-btn {
+    margin: 0 8px 8px 0;
+    padding: 6px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.ai-choice-btn:hover {
+    background-color: #0056b3;
+}

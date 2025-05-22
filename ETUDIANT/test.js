@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+
     const sidebarToggle = document.getElementById('sidebar-toggle');
     const closeSidebar = document.getElementById('close-sidebar');
     const sidebar = document.getElementById('sidebar');
@@ -28,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (sidebar && window.innerWidth >= 1024) {
         sidebar.classList.add('active');
     }
-
     const aiLaunchButton = document.getElementById('ai-launch-button');
     const aiChatContainer = document.getElementById('ai-chat-container');
     const closeAiChat = document.getElementById('close-ai-chat');
@@ -151,7 +151,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     toggleVisibility(data.element, data.visible);
                     break;
                 default:
-                
                     break;
             }
         })
@@ -205,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const newItem = document.createElement('div');
-        newItem.className = 'quick-access-item';
+        newItem.className = 'quick-access-item new-card';
         newItem.innerHTML = `
             <a href="#${elementName.toLowerCase().replace(/\s+/g, '-')}">
                 <div class="icon-container">
@@ -261,7 +260,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const placeholder = document.createElement('div');
             
             grid.insertBefore(placeholder, item1Element);
-            
             grid.insertBefore(item2Element, placeholder);
             
             if (index2 < items.length - 1) {
