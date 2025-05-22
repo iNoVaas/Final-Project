@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
             { id: 'documents', title: 'Documents', icon: 'fas fa-file-alt', color: null, visible: true },
             { id: 'settings', title: 'Settings', icon: 'fas fa-cog', color: null, visible: true }
         ],
+        deletedCards: [],
         lastModified: new Date().toISOString()
     };
 
@@ -29,14 +30,18 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (parsed.cards && Array.isArray(parsed.cards)) {
                 const savedCardIds = new Set(parsed.cards.map(card => card.id));
+                const deletedCardIds = new Set(parsed.deletedCards || []);
+                
+                // Only add default cards that are not already present AND not in deleted list
                 const newDefaultCards = DEFAULT_LAYOUT.cards.filter(
-                    defaultCard => !savedCardIds.has(defaultCard.id)
+                    defaultCard => !savedCardIds.has(defaultCard.id) && !deletedCardIds.has(defaultCard.id)
                 );
                 
                 const finalCards = [...parsed.cards, ...newDefaultCards];
                 
                 return {
                     cards: finalCards,
+                    deletedCards: parsed.deletedCards || [],
                     lastModified: parsed.lastModified || new Date().toISOString()
                 };
             }
@@ -129,6 +134,19 @@ document.addEventListener('DOMContentLoaded', function() {
         if (cardIndex === -1) {
             addAiMessage(`Couldn't find ${elementName} card to remove.`);
             return false;
+        }
+
+        const deletedCard = currentLayout.cards[cardIndex];
+        
+        // Check if this was a default card and add it to deleted list
+        const isDefaultCard = DEFAULT_LAYOUT.cards.some(card => card.id === deletedCard.id);
+        if (isDefaultCard) {
+            if (!currentLayout.deletedCards) {
+                currentLayout.deletedCards = [];
+            }
+            if (!currentLayout.deletedCards.includes(deletedCard.id)) {
+                currentLayout.deletedCards.push(deletedCard.id);
+            }
         }
 
         currentLayout.cards.splice(cardIndex, 1);
