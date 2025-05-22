@@ -1,41 +1,241 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    const sidebarToggle = document.getElementById('sidebar-toggle');
-    const closeSidebar = document.getElementById('close-sidebar');
-    const sidebar = document.getElementById('sidebar');
-    
-    if (sidebarToggle && sidebar) {
-        sidebarToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
-        });
-    }
-    
-    if (closeSidebar && sidebar) {
-        closeSidebar.addEventListener('click', function() {
-            sidebar.classList.remove('active');
-        });
-    }
-    
-    window.addEventListener('resize', function() {
-        if (sidebar) {
-            if (window.innerWidth >= 1024) {
-                sidebar.classList.add('active');
-            } else {
-                sidebar.classList.remove('active');
-            }
-        }
-    });
+    const STORAGE_KEY = 'student_portal_layout';
+    const DEFAULT_LAYOUT = {
+        cards: [
+            { id: 'my-cursus', title: 'My Cursus', icon: 'fas fa-graduation-cap', color: null, visible: true },
+            { id: 'announcements', title: 'Announcements', icon: 'fas fa-bullhorn', color: null, visible: true },
+            { id: 'schedule', title: 'Emploi du Temps', icon: 'fas fa-calendar-alt', color: null, visible: true },
+            { id: 'virtual-library', title: 'Virtual Library', icon: 'fas fa-book', color: null, visible: true },
+            { id: 'grades', title: 'Grades', icon: 'fas fa-chart-bar', color: null, visible: true },
+            { id: 'assignments', title: 'Assignments', icon: 'fas fa-tasks', color: null, visible: true },
+            { id: 'documents', title: 'Documents', icon: 'fas fa-file-alt', color: null, visible: true },
+            { id: 'settings', title: 'Settings', icon: 'fas fa-cog', color: null, visible: true }
+        ],
+        lastModified: new Date().toISOString()
+    };
 
-    if (sidebar && window.innerWidth >= 1024) {
-        sidebar.classList.add('active');
+    let currentLayout = loadLayout();
+
+    function loadLayout() {
+        const savedData = localStorage.getItem(STORAGE_KEY);
+        if (!savedData) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_LAYOUT));
+            return JSON.parse(JSON.stringify(DEFAULT_LAYOUT));
+        }
+        
+        try {
+            const parsed = JSON.parse(savedData);
+            
+            if (parsed.cards && Array.isArray(parsed.cards)) {
+                const savedCardIds = new Set(parsed.cards.map(card => card.id));
+                const newDefaultCards = DEFAULT_LAYOUT.cards.filter(
+                    defaultCard => !savedCardIds.has(defaultCard.id)
+                );
+                
+                const finalCards = [...parsed.cards, ...newDefaultCards];
+                
+                return {
+                    cards: finalCards,
+                    lastModified: parsed.lastModified || new Date().toISOString()
+                };
+            }
+            
+            return JSON.parse(JSON.stringify(DEFAULT_LAYOUT));
+        } catch (error) {
+            console.error('Error parsing saved layout:', error);
+            return JSON.parse(JSON.stringify(DEFAULT_LAYOUT));
+        }
     }
+
+    function saveLayout() {
+        currentLayout.lastModified = new Date().toISOString();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(currentLayout));
+        console.log('Layout saved:', currentLayout);
+    }
+
+    function renderLayout() {
+        const grid = document.querySelector('.quick-access-grid');
+        if (!grid) return;
+
+        grid.innerHTML = '';
+        
+        currentLayout.cards.filter(card => card.visible).forEach(card => {
+            const cardElement = document.createElement('div');
+            cardElement.className = 'quick-access-item';
+            cardElement.dataset.cardId = card.id;
+            
+            const bgColor = card.color ? `${card.color}20` : '';
+            const iconBgColor = card.color ? `${card.color}40` : '#f0f4ff';
+            const iconColor = card.color || '#3b82f6';
+            
+            cardElement.innerHTML = `
+                <a href="#${card.id}" style="${bgColor ? `background-color: ${bgColor};` : ''}">
+                    <div class="icon-container" style="background-color: ${iconBgColor};">
+                        <i class="${card.icon}" style="color: ${iconColor};"></i>
+                    </div>
+                    <h3>${card.title}</h3>
+                </a>
+            `;
+
+            cardElement.addEventListener('mouseenter', () => {
+                cardElement.style.transform = 'translateY(-8px)';
+                const iconContainer = cardElement.querySelector('.icon-container');
+                if (iconContainer) {
+                    iconContainer.style.backgroundColor = card.color ? 
+                        `${card.color}60` : '#dbeafe';
+                }
+            });
+            
+            cardElement.addEventListener('mouseleave', () => {
+                cardElement.style.transform = '';
+                const iconContainer = cardElement.querySelector('.icon-container');
+                if (iconContainer) {
+                    iconContainer.style.backgroundColor = iconBgColor;
+                }
+            });
+
+            grid.appendChild(cardElement);
+        });
+    }
+
+    function addNewElement(elementName, iconClass = 'fas fa-cube') {
+        const id = elementName.toLowerCase().replace(/\s+/g, '-');
+        
+        if (currentLayout.cards.some(card => card.id === id)) {
+            addAiMessage(`${elementName} card already exists.`);
+            return false;
+        }
+
+        currentLayout.cards.push({
+            id,
+            title: elementName,
+            icon: iconClass,
+            color: null,
+            visible: true
+        });
+        
+        saveLayout();
+        renderLayout();
+        addAiMessage(`Added new ${elementName} card successfully!`);
+        return true;
+    }
+
+    function deleteElement(elementName) {
+        const cardIndex = currentLayout.cards.findIndex(
+            card => card.title.toLowerCase() === elementName.toLowerCase()
+        );
+        
+        if (cardIndex === -1) {
+            addAiMessage(`Couldn't find ${elementName} card to remove.`);
+            return false;
+        }
+
+        currentLayout.cards.splice(cardIndex, 1);
+        saveLayout();
+        renderLayout();
+        addAiMessage(`Successfully removed ${elementName} card.`);
+        return true;
+    }
+
+    function swapElements(element1, element2) {
+        const index1 = currentLayout.cards.findIndex(
+            card => card.title.toLowerCase() === element1.toLowerCase()
+        );
+        const index2 = currentLayout.cards.findIndex(
+            card => card.title.toLowerCase() === element2.toLowerCase()
+        );
+
+        if (index1 === -1 || index2 === -1) {
+            addAiMessage(`Couldn't find both ${element1} and ${element2} to swap.`);
+            return false;
+        }
+
+        [currentLayout.cards[index1], currentLayout.cards[index2]] = 
+            [currentLayout.cards[index2], currentLayout.cards[index1]];
+        
+        saveLayout();
+        renderLayout();
+        addAiMessage(`Successfully swapped ${element1} and ${element2}!`);
+        return true;
+    }
+
+    function changeElementColor(elementName, color) {
+        const colorMap = {
+            'red': '#ef4444',
+            'blue': '#3b82f6',
+            'green': '#10b981',
+            'yellow': '#f59e0b',
+            'purple': '#8b5cf6',
+            'orange': '#f97316',
+            'pink': '#ec4899'
+        };
+        
+        const hexColor = colorMap[color.toLowerCase()] || '#3b82f6';
+        
+        const cardIndex = currentLayout.cards.findIndex(
+            card => card.title.toLowerCase() === elementName.toLowerCase()
+        );
+        
+        if (cardIndex === -1) {
+            addAiMessage(`Couldn't find ${elementName} to change color.`);
+            return false;
+        }
+
+        currentLayout.cards[cardIndex].color = hexColor;
+        saveLayout();
+        renderLayout();
+        addAiMessage(`Changed ${elementName} to ${color} color.`);
+        return true;
+    }
+
+    function moveElement(elementName, positionName) {
+        const elementIndex = currentLayout.cards.findIndex(
+            card => card.title.toLowerCase() === elementName.toLowerCase()
+        );
+        const positionIndex = currentLayout.cards.findIndex(
+            card => card.title.toLowerCase() === positionName.toLowerCase()
+        );
+
+        if (elementIndex === -1 || positionIndex === -1) {
+            addAiMessage(`Couldn't find both ${elementName} and ${positionName} to perform move.`);
+            return false;
+        }
+
+        const [movedCard] = currentLayout.cards.splice(elementIndex, 1);
+        currentLayout.cards.splice(positionIndex, 0, movedCard);
+        
+        saveLayout();
+        renderLayout();
+        addAiMessage(`Moved ${elementName} to ${positionName}.`);
+        return true;
+    }
+
+    function toggleVisibility(elementName, visible) {
+        const cardIndex = currentLayout.cards.findIndex(
+            card => card.title.toLowerCase() === elementName.toLowerCase()
+        );
+        
+        if (cardIndex === -1) {
+            addAiMessage(`Couldn't find ${elementName} to ${visible ? 'show' : 'hide'}.`);
+            return false;
+        }
+
+        currentLayout.cards[cardIndex].visible = visible;
+        saveLayout();
+        renderLayout();
+        addAiMessage(`${visible ? 'Shown' : 'Hidden'} ${elementName}.`);
+        return true;
+    }
+
+
     const aiLaunchButton = document.getElementById('ai-launch-button');
     const aiChatContainer = document.getElementById('ai-chat-container');
     const closeAiChat = document.getElementById('close-ai-chat');
     const aiPromptInput = document.getElementById('ai-prompt-input');
     const aiSubmit = document.getElementById('ai-submit');
     const aiMessages = document.getElementById('ai-messages');
-    
+
     if (aiChatContainer) {
         aiChatContainer.classList.remove('active');
     }
@@ -73,29 +273,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (aiChatContainer) {
         aiChatContainer.addEventListener('click', function(e) {
             e.stopPropagation();
-        });
-    }
-    
-    function handleAiPrompt() {
-        if (!aiPromptInput || !aiMessages) return;
-        
-        const prompt = aiPromptInput.value.trim();
-        if (prompt) {
-            addAiMessage(prompt, true);
-            aiPromptInput.value = '';
-            processAiCommand(prompt);
-        }
-    }
-    
-    if (aiSubmit) {
-        aiSubmit.addEventListener('click', handleAiPrompt);
-    }
-    
-    if (aiPromptInput) {
-        aiPromptInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                handleAiPrompt();
-            }
         });
     }
     
@@ -160,220 +337,77 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function deleteElement(elementName) {
-        const grid = document.querySelector('.quick-access-grid');
-        if (!grid) {
-            addAiMessage("Could not find the grid to modify.");
-            return;
-        }
-
-        let elementToRemove = null;
+    function handleAiPrompt() {
+        if (!aiPromptInput || !aiMessages) return;
         
-        grid.querySelectorAll('.quick-access-item').forEach(item => {
-            const title = item.querySelector('h3');
-            if (title && title.textContent.toLowerCase().includes(elementName.toLowerCase())) {
-                elementToRemove = item;
-            }
-        });
-
-        if (elementToRemove) {
-            grid.removeChild(elementToRemove);
-            addAiMessage(`Successfully removed ${elementName} card.`);
-        } else {
-            addAiMessage(`Couldn't find ${elementName} card to remove.`);
+        const prompt = aiPromptInput.value.trim();
+        if (prompt) {
+            addAiMessage(prompt, true);
+            aiPromptInput.value = '';
+            processAiCommand(prompt);
         }
     }
-
-    function addNewElement(elementName, iconClass = 'fas fa-cube') {
-        const grid = document.querySelector('.quick-access-grid');
-        if (!grid) {
-            addAiMessage("Could not find the grid to add elements to.");
-            return;
-        }
-
-        let exists = false;
-        grid.querySelectorAll('.quick-access-item h3').forEach(title => {
-            if (title.textContent.toLowerCase() === elementName.toLowerCase()) {
-                exists = true;
+    
+    if (aiSubmit) {
+        aiSubmit.addEventListener('click', handleAiPrompt);
+    }
+    
+    if (aiPromptInput) {
+        aiPromptInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleAiPrompt();
             }
         });
-
-        if (exists) {
-            addAiMessage(`${elementName} card already exists.`);
-            return;
-        }
-
-        const newItem = document.createElement('div');
-        newItem.className = 'quick-access-item new-card';
-        newItem.innerHTML = `
-            <a href="#${elementName.toLowerCase().replace(/\s+/g, '-')}">
-                <div class="icon-container">
-                    <i class="${iconClass}"></i>
-                </div>
-                <h3>${elementName}</h3>
-            </a>
-        `;
-
-        newItem.addEventListener('mouseenter', () => {
-            newItem.style.transform = 'translateY(-8px)';
-            const iconContainer = newItem.querySelector('.icon-container');
-            if (iconContainer) {
-                iconContainer.style.backgroundColor = '#dbeafe';
-            }
-        });
-        
-        newItem.addEventListener('mouseleave', () => {
-            newItem.style.transform = '';
-            const iconContainer = newItem.querySelector('.icon-container');
-            if (iconContainer) {
-                iconContainer.style.backgroundColor = '#f0f4ff';
-            }
-        });
-
-        grid.appendChild(newItem);
-        addAiMessage(`Added new ${elementName} card successfully!`);
     }
 
-    function swapElements(element1, element2) {
-        const grid = document.querySelector('.quick-access-grid');
-        if (!grid) {
-            addAiMessage("Could not find the grid to modify.");
-            return;
-        }
-        
-        const items = Array.from(grid.children);
-        let index1 = -1, index2 = -1;
-        
-        items.forEach((item, index) => {
-            const title = item.querySelector('h3');
-            if (title) {
-                const titleText = title.textContent.toLowerCase();
-                if (titleText.includes(element1.toLowerCase())) index1 = index;
-                if (titleText.includes(element2.toLowerCase())) index2 = index;
-            }
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const closeSidebar = document.getElementById('close-sidebar');
+    const sidebar = document.getElementById('sidebar');
+    
+    if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
         });
-        
-        if (index1 >= 0 && index2 >= 0) {
-            const item1Element = items[index1];
-            const item2Element = items[index2];
-            
-            const placeholder = document.createElement('div');
-            
-            grid.insertBefore(placeholder, item1Element);
-            grid.insertBefore(item2Element, placeholder);
-            
-            if (index2 < items.length - 1) {
-                grid.insertBefore(item1Element, items[index2 + 1]);
+    }
+    
+    if (closeSidebar && sidebar) {
+        closeSidebar.addEventListener('click', function() {
+            sidebar.classList.remove('active');
+        });
+    }
+    
+    window.addEventListener('resize', function() {
+        if (sidebar) {
+            if (window.innerWidth >= 1024) {
+                sidebar.classList.add('active');
             } else {
-                grid.appendChild(item1Element);
+                sidebar.classList.remove('active');
             }
-            
-            grid.removeChild(placeholder);
-            
-            addAiMessage(`Successfully swapped ${element1} and ${element2}!`);
-        } else {
-            addAiMessage(`Couldn't find both ${element1} and ${element2} to swap.`);
         }
+    });
+
+    if (sidebar && window.innerWidth >= 1024) {
+        sidebar.classList.add('active');
     }
 
-    function changeElementColor(elementName, color) {
-        const colorMap = {
-            'red': '#ef4444',
-            'blue': '#3b82f6',
-            'green': '#10b981',
-            'yellow': '#f59e0b',
-            'purple': '#8b5cf6',
-            'orange': '#f97316',
-            'pink': '#ec4899'
-        };
-        
-        const hexColor = colorMap[color.toLowerCase()] || '#3b82f6';
-        
-        const items = document.querySelectorAll('.quick-access-item');
-        let changed = false;
-        
-        items.forEach(item => {
-            const title = item.querySelector('h3');
-            if (title && title.textContent.toLowerCase().includes(elementName.toLowerCase())) {
-                item.style.backgroundColor = `${hexColor}20`;
-                const iconContainer = item.querySelector('.icon-container');
-                const icon = item.querySelector('i');
-                
-                if (iconContainer) {
-                    iconContainer.style.backgroundColor = `${hexColor}40`;
-                }
-                if (icon) {
-                    icon.style.color = hexColor;
-                }
-                changed = true;
-            }
-        });
-        
-        if (changed) {
-            addAiMessage(`Changed ${elementName} to ${color} color.`);
-        } else {
-            addAiMessage(`Couldn't find ${elementName} to change color.`);
-        }
-    }
+    renderLayout();
 
-    function moveElement(elementName, positionName) {
-        const grid = document.querySelector('.quick-access-grid');
-        if (!grid) {
-            addAiMessage("Could not find the grid to modify.");
-            return;
+    window.addEventListener('storage', (event) => {
+        if (event.key === STORAGE_KEY) {
+            currentLayout = JSON.parse(event.newValue);
+            renderLayout();
         }
-        
-        const items = Array.from(grid.children);
-        let elementIndex = -1, positionIndex = -1;
-        
-        items.forEach((item, index) => {
-            const title = item.querySelector('h3');
-            if (title) {
-                const titleText = title.textContent.toLowerCase();
-                if (titleText.includes(elementName.toLowerCase())) elementIndex = index;
-                if (titleText.includes(positionName.toLowerCase())) positionIndex = index;
-            }
-        });
-        
-        if (elementIndex >= 0 && positionIndex >= 0) {
-            const element = items[elementIndex];
-            grid.removeChild(element);
-            
-            const updatedItems = Array.from(grid.children);
-            
-            let targetIndex = positionIndex;
-            if (positionIndex > elementIndex) {
-                targetIndex = positionIndex - 1;
-            }
-            
-            if (targetIndex >= updatedItems.length) {
-                grid.appendChild(element);
-            } else {
-                grid.insertBefore(element, updatedItems[targetIndex]);
-            }
-            
-            addAiMessage(`Moved ${elementName} to ${positionName}.`);
-        } else {
-            addAiMessage(`Couldn't find both ${elementName} and ${positionName} to perform move.`);
-        }
-    }
+    });
 
-    function toggleVisibility(elementName, visible) {
-        const items = document.querySelectorAll('.quick-access-item');
-        let changed = false;
-        
-        items.forEach(item => {
-            const title = item.querySelector('h3');
-            if (title && title.textContent.toLowerCase().includes(elementName.toLowerCase())) {
-                item.style.display = visible ? 'flex' : 'none';
-                changed = true;
-            }
-        });
-        
-        if (changed) {
-            addAiMessage(`${visible ? 'Shown' : 'Hidden'} ${elementName}.`);
-        } else {
-            addAiMessage(`Couldn't find ${elementName} to ${visible ? 'show' : 'hide'}.`);
+    window.resetPortalLayout = function() {
+        if (confirm('Reset layout to default? All customizations will be lost.')) {
+            localStorage.removeItem(STORAGE_KEY);
+            location.reload();
         }
-    }
+    };
+
+    window.debugLayout = function() {
+        console.log('Current Layout:', currentLayout);
+        console.log('LocalStorage:', localStorage.getItem(STORAGE_KEY));
+    };
 });
