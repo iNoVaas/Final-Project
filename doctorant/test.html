@@ -1,0 +1,322 @@
+test.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="stylee.css">
+
+    <title>Doctoral Student Portal</title>
+    <!-- CSS and JS files will be added later -->
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="USTHB-removebg-preview.png" alt="University Logo" class="university-logo">
+            </div>
+            <nav class="main-navigation">
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="#dashboard" class="nav-link">Dashboard</a></li>
+                    <li class="nav-item"><a href="#research" class="nav-link">Research</a></li>
+                    <li class="nav-item"><a href="#stages" class="nav-link">Internships</a></li>
+                    <li class="nav-item"><a href="#library" class="nav-link">Virtual Library</a></li>
+                    <li class="nav-item"><a href="#technique" class="nav-link">Engineering Techniques</a></li>
+                    <li class="nav-item"><a href="#profile" class="nav-link">My Profile</a></li>
+                </ul>
+            </nav>
+            <div class="user-menu">
+                <div class="user-profile">
+                    <img src="graduating-student.png" alt="User Profile" class="profile-image">
+                    <span class="username">Dr.Abderraouf</span>
+                </div>
+                <div class="notifications">
+                    <span class="notification-icon">🔔</span>
+                    <span class="notification-count">3</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section id="dashboard" class="dashboard-section">
+            <h1 class="welcome-heading">Welcome to your Doctoral Portal</h1>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3 class="stat-title">Research Progress</h3>
+                    <div class="progress-indicator">75%</div>
+                </div>
+                <div class="stat-card">
+                    <h3 class="stat-title">Upcoming Deadlines</h3>
+                    <ul class="deadline-list">
+                        <li class="deadline-item">Thesis Chapter Review - June 15, 2025</li>
+                        <li class="deadline-item">Conference Submission - July 10, 2025</li>
+                    </ul>
+                </div>
+                <div class="stat-card">
+                    <h3 class="stat-title">Recent Activities</h3>
+                    <ul class="activity-list">
+                        <li class="activity-item">Paper submitted to Journal of Science</li>
+                        <li class="activity-item">Attended Research Methodology Workshop</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="stages" class="stages-section">
+            <h2 class="section-heading">Les Stages</h2>
+            <div class="stages-container">
+                <div class="stage-card">
+                    <h3 class="stage-title">Teaching Assistantship</h3>
+                    <p class="stage-description">Opportunity to assist in undergraduate courses related to your field.</p>
+                    <a href="#apply-teaching" class="stage-button">Apply Now</a>
+                </div>
+                <div class="stage-card">
+                    <h3 class="stage-title">Industry Internship</h3>
+                    <p class="stage-description">Collaborate with industry partners on real-world applications of your research.</p>
+                    <a href="#apply-industry" class="stage-button">View Opportunities</a>
+                </div>
+                <div class="stage-card">
+                    <h3 class="stage-title">Research Exchange</h3>
+                    <p class="stage-description">Participate in research exchanges with partner universities.</p>
+                    <a href="#apply-exchange" class="stage-button">Explore Programs</a>
+                </div>
+            </div>
+            <div class="past-stages">
+                <h3 class="past-stages-title">My Past Internships</h3>
+                <table class="stages-table">
+                    <thead>
+                        <tr>
+                            <th>Period</th>
+                            <th>Organization</th>
+                            <th>Project</th>
+                            <th>Certificate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Jan-Mar 2025</td>
+                            <td>Research Lab XYZ</td>
+                            <td>Data Analysis for AI Models</td>
+                            <td><a href="#certificate">View</a></td>
+                        </tr>
+                        <tr>
+                            <td>Jun-Aug 2024</td>
+                            <td>Tech Company ABC</td>
+                            <td>Machine Learning Integration</td>
+                            <td><a href="#certificate">View</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="library" class="library-section">
+            <h2 class="section-heading">Virtual Library</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search for papers, journals, books...">
+                <button class="search-button">Search</button>
+                <div class="advanced-search">
+                    <a href="#advanced-search">Advanced Search</a>
+                </div>
+            </div>
+            <div class="library-categories">
+                <div class="category-item">
+                    <h3 class="category-title">Academic Journals</h3>
+                    <ul class="resource-list">
+                        <li class="resource-item"><a href="#journal1">Journal of Advanced Research</a></li>
+                        <li class="resource-item"><a href="#journal2">Scientific Reports</a></li>
+                        <li class="resource-item"><a href="#journal3">Nature</a></li>
+                        <li class="resource-item"><a href="#more-journals">More Journals...</a></li>
+                    </ul>
+                </div>
+                <div class="category-item">
+                    <h3 class="category-title">E-Books</h3>
+                    <ul class="resource-list">
+                        <li class="resource-item"><a href="#book1">Research Methodology</a></li>
+                        <li class="resource-item"><a href="#book2">Data Analysis Techniques</a></li>
+                        <li class="resource-item"><a href="#book3">Advanced Statistics</a></li>
+                        <li class="resource-item"><a href="#more-books">More Books...</a></li>
+                    </ul>
+                </div>
+                <div class="category-item">
+                    <h3 class="category-title">University Archives</h3>
+                    <ul class="resource-list">
+                        <li class="resource-item"><a href="#thesis1">Past Doctoral Theses</a></li>
+                        <li class="resource-item"><a href="#research1">Research Papers</a></li>
+                        <li class="resource-item"><a href="#conference1">Conference Publications</a></li>
+                        <li class="resource-item"><a href="#more-archives">More Archives...</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="recent-downloads">
+                <h3 class="recent-downloads-title">Recently Downloaded</h3>
+                <ul class="downloads-list">
+                    <li class="download-item">
+                        <span class="download-name">Statistical Analysis for Research Paper.pdf</span>
+                        <span class="download-date">May 18, 2025</span>
+                    </li>
+                    <li class="download-item">
+                        <span class="download-name">Machine Learning Applications.pdf</span>
+                        <span class="download-date">May 15, 2025</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="technique" class="technique-section">
+            <h2 class="section-heading">Technique Ingénieur</h2>
+            <div class="technique-container">
+                <div class="technique-card">
+                    <h3 class="technique-title">Laboratory Equipment</h3>
+                    <p class="technique-description">Access guides and manuals for laboratory equipment relevant to your research.</p>
+                    <a href="#equipment" class="technique-link">View Equipment Resources</a>
+                </div>
+                <div class="technique-card">
+                    <h3 class="technique-title">Research Tools</h3>
+                    <p class="technique-description">Software tools and platforms available for doctoral students.</p>
+                    <a href="#tools" class="technique-link">Explore Research Tools</a>
+                </div>
+                <div class="technique-card">
+                    <h3 class="technique-title">Engineering Standards</h3>
+                    <p class="technique-description">Access to engineering standards and best practices documentation.</p>
+                    <a href="#standards" class="technique-link">Browse Standards</a>
+                </div>
+            </div>
+            <div class="technique-resources">
+                <h3 class="resources-title">Featured Resources</h3>
+                <ul class="resources-list">
+                    <li class="resource-item">
+                        <span class="resource-icon">📄</span>
+                        <span class="resource-name">Engineering Drawing Standards</span>
+                        <a href="#view-resource" class="resource-button">View</a>
+                    </li>
+                    <li class="resource-item">
+                        <span class="resource-icon">🎥</span>
+                        <span class="resource-name">Video Tutorial: Advanced Simulation Techniques</span>
+                        <a href="#view-resource" class="resource-button">Watch</a>
+                    </li>
+                    <li class="resource-item">
+                        <span class="resource-icon">📚</span>
+                        <span class="resource-name">Handbook of Experimental Procedures</span>
+                        <a href="#view-resource" class="resource-button">Download</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="profile" class="profile-section">
+            <h2 class="section-heading">My Profile</h2>
+            <div class="profile-container">
+                <div class="profile-header">
+                    <div class="profile-image-large">
+                        <img src="graduating-student.png" alt="Profile Picture" class="profile-pic">
+                        <button class="edit-profile-image">Change Photo</button>
+                    </div>
+                    <div class="profile-info">
+                        <h3 class="profile-name">Dr. Abderraouf</h3>
+                        <p class="profile-program">Doctoral Program in Computer Science</p>
+                        <p class="profile-year">Year 2 of 4</p>
+                        <p class="profile-supervisor">Supervisor: Prof. Haigoun</p>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="profile-section">
+                        <h4 class="profile-section-title">Personal Information</h4>
+                        <div class="profile-field">
+                            <span class="field-label">Email:</span>
+                            <span class="field-value">raoufuniver@gmail.com</span>
+                            <span class="edit-field">✏️</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">Phone:</span>
+                            <span class="field-value">+0783231135</span>
+                            <span class="edit-field">✏️</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">Office:</span>
+                            <span class="field-value">Building C, Room 305</span>
+                            <span class="edit-field">✏️</span>
+                        </div>
+                    </div>
+                    <div class="profile-section">
+                        <h4 class="profile-section-title">Research Information</h4>
+                        <div class="profile-field">
+                            <span class="field-label">Research Topic:</span>
+                            <span class="field-value">Machine Learning Applications in Healthcare</span>
+                            <span class="edit-field">✏️</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="field-label">Keywords:</span>
+                            <span class="field-value">AI, Machine Learning, Healthcare, Data Analysis</span>
+                            <span class="edit-field">✏️</span>
+                        </div>
+                    </div>
+                    <div class="profile-section">
+                        <h4 class="profile-section-title">Publications</h4>
+                        <ul class="publications-list">
+                            <li class="publication-item">
+                                <span class="publication-title">Machine Learning for Early Disease Detection</span>
+                                <span class="publication-journal">Journal of Medical AI, 2024</span>
+                                <a href="#publication" class="publication-link">View</a>
+                            </li>
+                            <li class="publication-item">
+                                <span class="publication-title">Data Analysis in Clinical Trials</span>
+                                <span class="publication-journal">Medical Data Conference, 2023</span>
+                                <a href="#publication" class="publication-link">View</a>
+                            </li>
+                        </ul>
+                        <button class="add-publication">+ Add Publication</button>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="action-button update-profile">Update Profile</button>
+                    <button class="action-button export-cv">Export CV</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="USTHB-removebg-preview.png" alt="University Logo" class="university-logo-footer">
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-list">
+                        <li class="footer-item"><a href="#home">Home</a></li>
+                        <li class="footer-item"><a href="#research">Research</a></li>
+                        <li class="footer-item"><a href="#library">Library</a></li>
+                        <li class="footer-item"><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-heading">Resources</h4>
+                    <ul class="footer-list">
+                        <li class="footer-item"><a href="#help">Help Center</a></li>
+                        <li class="footer-item"><a href="#faq">FAQ</a></li>
+                        <li class="footer-item"><a href="#support">Technical Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-heading">Contact Us</h4>
+                    <address class="university-address">
+                        USTHB<br>
+                        123 University Street<br>
+                        Babe Ezouar, Algeria<br>
+                        Email: raoufuniver@gmail.com<br>
+                        Phone: 0783231135
+                    </address>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 Université des Sciences et de la Technologie Houari Boumediene (USTHB). All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+        <script src="js.js"></script>
+
+</body>
+</html>

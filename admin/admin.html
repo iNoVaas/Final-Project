@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header" id="header">
+            <h1>Admin Dashboard</h1>
+            <p>Select a profile to start chatting with the AI assistant</p>
+        </div>
+
+        <div class="profiles-fullscreen" id="profilesFullscreen">
+            <div class="profiles-fullscreen-grid">
+                <div class="profile-card-fullscreen" data-profile="student">
+                    <span class="profile-icon-fullscreen">🎓</span>
+                    <div class="profile-name-fullscreen">Student</div>
+                    <div class="profile-description-fullscreen">Academic assistance and learning support for students of all levels</div>
+                </div>
+                <div class="profile-card-fullscreen" data-profile="teacher">
+                    <span class="profile-icon-fullscreen">👨‍🏫</span>
+                    <div class="profile-name-fullscreen">Teacher</div>
+                    <div class="profile-description-fullscreen">Educational tools and curriculum development help for educators</div>
+                </div>
+                <div class="profile-card-fullscreen" data-profile="ats">
+                    <span class="profile-icon-fullscreen">⚙️</span>
+                    <div class="profile-name-fullscreen">ATS</div>
+                    <div class="profile-description-fullscreen">Administrative and technical support systems management</div>
+                </div>
+                <div class="profile-card-fullscreen" data-profile="doctoral">
+                    <span class="profile-icon-fullscreen">🔬</span>
+                    <div class="profile-name-fullscreen">Doctoral</div>
+                    <div class="profile-description-fullscreen">Advanced research assistance and analysis for doctoral students</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard" id="dashboard">
+            <div class="profiles-section">
+                <div class="section-title">
+                    👥 Available Profiles
+                </div>
+                <div class="profiles-grid">
+                    <div class="profile-card" data-profile="student">
+                        <div class="profile-icon-container">
+                            <span class="profile-icon">🎓</span>
+                        </div>
+                        <div class="profile-info">
+                            <div class="profile-name">Student</div>
+                            <div class="profile-description">Academic assistance and learning support</div>
+                        </div>
+                    </div>
+                    <div class="profile-card" data-profile="teacher">
+                        <div class="profile-icon-container">
+                            <span class="profile-icon">👨‍🏫</span>
+                        </div>
+                        <div class="profile-info">
+                            <div class="profile-name">Teacher</div>
+                            <div class="profile-description">Educational tools and curriculum development</div>
+                        </div>
+                    </div>
+                    <div class="profile-card" data-profile="ats">
+                        <div class="profile-icon-container">
+                            <span class="profile-icon">⚙️</span>
+                        </div>
+                        <div class="profile-info">
+                            <div class="profile-name">ATS</div>
+                            <div class="profile-description">Administrative and technical support</div>
+                        </div>
+                    </div>
+                    <div class="profile-card" data-profile="doctoral">
+                        <div class="profile-icon-container">
+                            <span class="profile-icon">🔬</span>
+                        </div>
+                        <div class="profile-info">
+                            <div class="profile-name">Doctoral</div>
+                            <div class="profile-description">Advanced research assistance</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chatbot-section" id="chatbotSection">
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
