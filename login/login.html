@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USTHB - Login Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="stylesheet" href="login.css">
+
+</head>
+<body>
+    <div class="container">
+        <div class="auth-container">
+            <div class="login-section">
+                <div class="logo">
+                    <img src="/api/placeholder/200/80" alt="University Logo">
+                </div>
+                <h1>Welcome to USTHB Student Portal</h1>
+                <div class="tabs">
+                    <button class="tab-btn active" id="login-tab">Login</button>
+                    <button class="tab-btn" id="register-tab">Register</button>
+                </div>
+                <div class="forms-container">
+                    <!-- Login Form -->
+                    <form id="login-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <div class="input-field">
+                                <i class="user-icon"></i>
+                                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="input-field password-field">
+                                <!-- Remove the lock icon -->
+                                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                                <!-- The toggle button will be added by JavaScript -->
+                            </div>
+                        </div>
+                        <div class="form-options">
+                            <div class="remember-me">
+                                <input type="checkbox" id="remember" name="remember">
+                                <label for="remember">Remember me</label>
+                            </div>
+                            <a href="#" class="forgot-password">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="btn-login">Login</button>
+                    </form>
+                    
+                    <!-- Register Form -->
+                    <form id="register-form" class="auth-form hide">
+                        <div class="form-group">
+                            <label for="full-name">Full Name</label>
+                            <div class="input-field">
+                                <i class="user-icon"></i>
+                                <input type="text" id="full-name" name="full-name" placeholder="Enter your full name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-password">Password</label>
+                            <div class="input-field password-field">
+                                <!-- Remove the lock icon -->
+                                <input type="password" id="reg-password" name="reg-password" placeholder="Create a password" required>
+                                <!-- The toggle button will be added by JavaScript -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <div class="input-field">
+                                <i class="email-icon"></i>
+                                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-password">Password</label>
+                            <div class="input-field">
+                                <i class="lock-icon"></i>
+                                <input type="password" id="reg-password" name="reg-password" placeholder="Create a password" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm Password</label>
+                            <div class="input-field password-field">
+                                <!-- Remove the lock icon -->
+                                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+                                <!-- The toggle button will be added by JavaScript -->
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-register">Register</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <div class="info-box">
+                    <h3>Besoin d'aide</h3>
+                    <ul>
+                        <li>
+                            <i class="calendar-icon"></i>
+                            <a href="#">Emplois du temps S2</a>
+                        </li>
+                        <li>
+                            <i class="map-icon"></i>
+                            <a href="#">Plan des locaux d'enseignement</a>
+                        </li>
+                        <li>
+                            <i class="help-icon"></i>
+                            <a href="#">Je ne connais pas mon login !</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <h3>Liens importants</h3>
+                    <ul>
+                        <li>
+                            <i class="mail-icon"></i>
+                            <a href="#">Messagerie USTHB</a>
+                        </li>
+                        <li>
+                            <i class="moodle-icon"></i>
+                            <a href="#">Plateforme Moodle USTHB</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <h3>A travers cet espace l'étudiant peut</h3>
+                    <ul>
+                        <li>
+                            <i class="course-icon"></i>
+                            <a href="#">Consulter son cursus</a>
+                        </li>
+                        <li>
+                            <i class="service-icon"></i>
+                            <a href="#">Effectuer des demandes de services en ligne</a>
+                            <span class="sub-info">telque : congé académique,  réintégration, transfert,...</span>
+                        </li>
+                        <li>
+                            <i class="form-icon"></i>
+                            <a href="#">Saisir sa fiche de voeux</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 Université des Sciences et de la Technologie Houari Boumediene (USTHB). All rights reserved.</p>
+        </footer>
+    </div>
+    <script src="login.js"></script>
+</body>
+</html>

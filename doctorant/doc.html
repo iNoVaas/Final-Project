@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="docc.css">
+    <title>Doctoral Student Portal</title>
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <h1>Doctoral Portal</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#" class="active"><i class="icon-home"></i>Dashboard</a></li>
+                    <li><a href="#"><i class="icon-book"></i>Virtual Library</a></li>
+                    <li><a href="#"><i class="icon-briefcase"></i>Internships</a></li>
+                    <li><a href="#"><i class="icon-announcement"></i>Announcements</a></li>
+                    <li><a href="#"><i class="icon-calendar"></i>Academic Calendar</a></li>
+                    <li><a href="#"><i class="icon-users"></i>Research Groups</a></li>
+                    <li><a href="#"><i class="icon-file"></i>Thesis Progress</a></li>
+                    <li><a href="#"><i class="icon-settings"></i>Settings</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <!-- Avatar placeholder -->
+                </div>
+                <div class="user-info">
+                    <span class="user-name">Doctoral Student</span>
+                    <span class="user-role">PhD Candidate</span>
+                </div>
+                <a href="#" class="logout-button">Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="search-container">
+                    <input type="text" placeholder="Search..." class="search-input">
+                    <button type="submit" class="search-button">Search</button>
+                </div>
+                <div class="header-actions">
+                    <button class="notification-button">Notifications</button>
+                    <button class="help-button">Help</button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard">
+                <h2>Welcome to your Doctoral Portal</h2>
+                
+                <!-- Quick Access Icons -->
+                <section class="quick-access">
+                    <h3>Quick Access</h3>
+                    <div class="icon-grid">
+                        <a href="#" class="icon-card">
+                            <div class="icon-container library-icon"></div>
+                            <span>Virtual Library</span>
+                        </a>
+                        <a href="#" class="icon-card">
+                            <div class="icon-container internship-icon"></div>
+                            <span>Internships</span>
+                        </a>
+                        <a href="#" class="icon-card">
+                            <div class="icon-container announcement-icon"></div>
+                            <span>Announcements</span>
+                        </a>
+                        <a href="#" class="icon-card">
+                            <div class="icon-container calendar-icon"></div>
+                            <span>Academic Calendar</span>
+                        </a>
+                        <a href="#" class="icon-card">
+                            <div class="icon-container research-icon"></div>
+                            <span>Research Groups</span>
+                        </a>
+                        <a href="#" class="icon-card">
+                            <div class="icon-container thesis-icon"></div>
+                            <span>Thesis Progress</span>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Recent Announcements -->
+                <section class="recent-announcements">
+                    <h3>Recent Announcements</h3>
+                    <div class="announcement-list">
+                        <div class="announcement-item">
+                            <h4>Upcoming Doctoral Symposium</h4>
+                            <p>Join us for the annual doctoral symposium on May 15, 2025.</p>
+                            <time>Posted on: April 18, 2025</time>
+                        </div>
+                        <div class="announcement-item">
+                            <h4>New Research Funding Opportunity</h4>
+                            <p>Applications for the summer research grant are now open.</p>
+                            <time>Posted on: April 10, 2025</time>
+                        </div>
+                        <div class="announcement-item">
+                            <h4>Library Extended Hours</h4>
+                            <p>The doctoral study room will have extended hours during finals week.</p>
+                            <time>Posted on: April 5, 2025</time>
+                        </div>
+                    </div>
+                    <a href="#" class="view-all">View All Announcements</a>
+                </section>
+
+                <!-- Your Progress -->
+                <section class="progress-section">
+                    <h3>Thesis Progress</h3>
+                    <div class="progress-tracker">
+                        <div class="progress-item">
+                            <span class="progress-label">Research Proposal</span>
+                            <div class="progress-bar">
+                                <div class="progress-value"></div>
+                            </div>
+                            <span class="progress-percentage">100%</span>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">Literature Review</span>
+                            <div class="progress-bar">
+                                <div class="progress-value"></div>
+                            </div>
+                            <span class="progress-percentage">75%</span>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">Data Collection</span>
+                            <div class="progress-bar">
+                                <div class="progress-value"></div>
+                            </div>
+                            <span class="progress-percentage">40%</span>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">Analysis</span>
+                            <div class="progress-bar">
+                                <div class="progress-value"></div>
+                            </div>
+                            <span class="progress-percentage">10%</span>
+                        </div>
+                    </div>
+                    <a href="#" class="update-progress">Update Progress</a>
+                </section>
+
+                <!-- Upcoming Events -->
+                <section class="upcoming-events">
+                    <h3>Upcoming Events</h3>
+                    <div class="event-list">
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="date-day">28</span>
+                                <span class="date-month">APR</span>
+                            </div>
+                            <div class="event-details">
+                                <h4>Doctoral Seminar Series</h4>
+                                <p>Guest Speaker: Dr. Emily Johnson on Research Methodologies</p>
+                                <span class="event-time">10:00 AM - 12:00 PM</span>
+                                <span class="event-location">Hall 3B</span>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="date-day">05</span>
+                                <span class="date-month">MAY</span>
+                            </div>
+                            <div class="event-details">
+                                <h4>Grant Writing Workshop</h4>
+                                <p>Learn effective strategies for writing successful grant proposals</p>
+                                <span class="event-time">2:00 PM - 4:30 PM</span>
+                                <span class="event-location">Research Center, Room 205</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="view-calendar">View Full Calendar</a>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 University Doctoral Program. All rights reserved.</p>
+            <nav class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Contact Support</a>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>
