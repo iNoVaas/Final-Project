@@ -51,9 +51,9 @@ def analyze_prompt(prompt, current_html):
             "message": f"Deleting {element_name} card."
         }
     
-    add_match = re.search(r'(?:add|create)\s+(?:a\s+)?(?:new\s+)?(card|element|section)\s+(?:for|named?)\s+(.+)', prompt_lower)
+    add_match = re.search(r'(?:add|create)\s+(?:a\s+)?(?:new\s+)?(.+?)\s*(?:card|element|section)?$', prompt_lower)
     if add_match:
-        element_name = add_match.group(2).strip()
+        element_name = add_match.group(1).strip()
         icon_type = detect_icon_type(element_name)
         return {
             "action": "add_element",
