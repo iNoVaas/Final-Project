@@ -10,7 +10,6 @@ atss.html
 </head>
 <body>
     <style>
-        /* ===== GLOBAL STYLES ===== */
 :root {
   --primary-color: #4361ee;
   --primary-light: #4895ef;
@@ -856,7 +855,7 @@ ul {
 
             <!-- Dashboard Cards -->
             <div class="cards-container">
-                <div class="card">
+                <div class="card" data-card-id="profile">
                     <div class="card-icon">
                         <i class="fas fa-user-graduate"></i>
                     </div>
@@ -867,7 +866,7 @@ ul {
                     <a href="#profile" class="card-link">Voir détails <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
-                <div class="card">
+                <div class="card" data-card-id="wifi">
                     <div class="card-icon">
                         <i class="fas fa-wifi"></i>
                     </div>
@@ -878,7 +877,7 @@ ul {
                     <a href="#wifi" class="card-link">Gérer <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
-                <div class="card">
+                <div class="card" data-card-id="stage">
                     <div class="card-icon">
                         <i class="fas fa-briefcase"></i>
                     </div>
@@ -889,7 +888,7 @@ ul {
                     <a href="#stage" class="card-link">Postuler <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
-                <div class="card">
+                <div class="card" data-card-id="prime">
                     <div class="card-icon">
                         <i class="fas fa-award"></i>
                     </div>
@@ -1059,5 +1058,6 @@ ul {
     </div>
 
     <script src="atss.js"></script>
+    <script src="dashboard-sync.js"></script>
 </body>
 </html>

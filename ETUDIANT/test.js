@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Handle window resize for responsive behavior
     window.addEventListener('resize', function() {
         if (window.innerWidth >= 1024 && sidebar) {
             sidebar.classList.add('active');
@@ -34,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Initial check on page load
     if (window.innerWidth >= 1024 && sidebar) {
         sidebar.classList.add('active');
         console.log('Sidebar activated on load (desktop)');

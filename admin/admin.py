@@ -96,10 +96,7 @@ DEFAULT_LAYOUTS = {
 
 @app.route('/admin-chat', methods=['POST'])
 def admin_chat():
-    """
-    Main endpoint for admin chat interactions
-    Handles layout modification commands for different profiles
-    """
+    """Main endpoint for admin chat interactions"""
     try:
         data = request.json
         message = data.get('message', '')
@@ -123,9 +120,7 @@ def admin_chat():
         }), 500
 
 def analyze_admin_prompt(prompt, profile, current_layout):
-    """
-    Analyze the admin's prompt and return appropriate action
-    """
+    """Analyze the admin's prompt and return appropriate action"""
     prompt_lower = prompt.lower()
     current_cards = current_layout.get('cards', [])
     existing_titles = [card['title'].lower() for card in current_cards if card.get('visible', True)]
@@ -372,7 +367,7 @@ def get_help_message(profile):
             "Add new Exams card",
             "Remove Library card", 
             "Change Grades color to blue",
-            "Swap My Cursus and Announcements",
+            "Swap My Cursus an Announcements",
             "Show current layout"
         ],
         'teacher': [
@@ -407,82 +402,9 @@ def get_help_message(profile):
         "profile": profile
     }
 
-@app.route('/get-default-layout', methods=['POST'])
-def get_default_layout():
-    """Get default layout for a specific profile"""
-    try:
-        data = request.json
-        profile = data.get('profile', 'student')
-        
-        if profile not in DEFAULT_LAYOUTS:
-            return jsonify({
-                "error": "Invalid profile",
-                "message": f"Profile '{profile}' not found"
-            }), 400
-        
-        return jsonify({
-            "profile": profile,
-            "layout": DEFAULT_LAYOUTS[profile],
-            "message": f"Default layout for {profile.title()} profile"
-        })
-    
-    except Exception as e:
-        return jsonify({
-            "error": "Server error",
-            "message": str(e)
-        }), 500
-
-@app.route('/health', methods=['GET'])
-def health_check():
-    """Health check endpoint"""
-    return jsonify({
-        "status": "healthy",
-        "message": "Admin API is running",
-        "timestamp": datetime.now().isoformat(),
-        "available_profiles": list(DEFAULT_LAYOUTS.keys())
-    })
-
-@app.route('/profiles', methods=['GET'])
-def get_profiles():
-    """Get available profiles and their default layouts"""
-    return jsonify({
-        "profiles": {
-            "student": {
-                "name": "Student",
-                "icon": "🎓",
-                "description": "Academic assistance and learning support",
-                "default_cards": len(DEFAULT_LAYOUTS['student'])
-            },
-            "teacher": {
-                "name": "Teacher", 
-                "icon": "👨‍🏫",
-                "description": "Educational tools and curriculum development",
-                "default_cards": len(DEFAULT_LAYOUTS['teacher'])
-            },
-            "ats": {
-                "name": "ATS",
-                "icon": "⚙️", 
-                "description": "Administrative and technical support",
-                "default_cards": len(DEFAULT_LAYOUTS['ats'])
-            },
-            "doctoral": {
-                "name": "Doctoral",
-                "icon": "🔬",
-                "description": "Advanced research assistance",
-                "default_cards": len(DEFAULT_LAYOUTS['doctoral'])
-            }
-        }
-    })
-
 if __name__ == '__main__':
     print("Starting Admin API Server...")
     print("Available endpoints:")
     print("- POST /admin-chat - Main admin chat interface")
-    print("- POST /get-default-layout - Get default layout for profile")
-    print("- GET /health - Health check")
-    print("- GET /profiles - Get available profiles")
     print("\nServer will be available at: http://localhost:5000")
-    print("Make sure to install required packages:")
-    print("pip install flask flask-cors fuzzywuzzy python-levenshtein")
-    
     app.run(host='0.0.0.0', port=5000, debug=True)
