@@ -83,14 +83,12 @@ DEFAULT_LAYOUTS = {
         {'id': 'analytics', 'title': 'Analytics', 'icon': 'fas fa-chart-pie', 'color': None, 'visible': True}
     ],
     'doctoral': [
-        {'id': 'research-project', 'title': 'Research Project', 'icon': 'fas fa-microscope', 'color': None, 'visible': True},
-        {'id': 'literature-review', 'title': 'Literature Review', 'icon': 'fas fa-book-reader', 'color': None, 'visible': True},
-        {'id': 'data-analysis', 'title': 'Data Analysis', 'icon': 'fas fa-chart-area', 'color': None, 'visible': True},
-        {'id': 'thesis-writing', 'title': 'Thesis Writing', 'icon': 'fas fa-pen-fancy', 'color': None, 'visible': True},
-        {'id': 'publications', 'title': 'Publications', 'icon': 'fas fa-newspaper', 'color': None, 'visible': True},
-        {'id': 'conferences', 'title': 'Conferences', 'icon': 'fas fa-users', 'color': None, 'visible': True},
-        {'id': 'supervisor-meetings', 'title': 'Supervisor Meetings', 'icon': 'fas fa-handshake', 'color': None, 'visible': True},
-        {'id': 'resources', 'title': 'Research Resources', 'icon': 'fas fa-archive', 'color': None, 'visible': True}
+        {'id': 'dashboard', 'title': 'Dashboard', 'icon': 'fas fa-tachometer-alt', 'color': None, 'visible': True},
+        {'id': 'research', 'title': 'Research', 'icon': 'fas fa-microscope', 'color': None, 'visible': True},
+        {'id': 'stages', 'title': 'Internships', 'icon': 'fas fa-briefcase', 'color': None, 'visible': True},
+        {'id': 'library', 'title': 'Virtual Library', 'icon': 'fas fa-book', 'color': None, 'visible': True},
+        {'id': 'technique', 'title': 'Engineering Techniques', 'icon': 'fas fa-tools', 'color': None, 'visible': True},
+        {'id': 'profile', 'title': 'My Profile', 'icon': 'fas fa-user', 'color': None, 'visible': True}
     ]
 }
 
@@ -122,43 +120,36 @@ def admin_chat():
 def analyze_admin_prompt(prompt, profile, current_layout):
     """Analyze the admin's prompt and return appropriate action"""
     prompt_lower = prompt.lower()
-    current_cards = current_layout.get('cards', [])
-    existing_titles = [card['title'].lower() for card in current_cards if card.get('visible', True)]
     
     if any(keyword in prompt_lower for keyword in ['show', 'display', 'list', 'current']) and \
        any(keyword in prompt_lower for keyword in ['layout', 'cards', 'dashboard']):
-        return handle_show_layout(current_cards, profile)
+        if profile == 'doctoral':
+            return handle_show_layout(current_layout.get('cards', []), profile)
+        return handle_show_layout(current_layout.get('cards', []), profile)
     
-    delete_match = re.search(r'(delete|remove|hide)\s+(?:the\s+)?(.+?)(?:\s+card)?$', prompt_lower)
-    if delete_match:
-        element_name = delete_match.group(2).strip()
-        return handle_delete_element(element_name, existing_titles, profile)
-
     add_match = re.search(r'(?:add|create)\s+(?:a\s+)?(?:new\s+)?(.+?)\s*(?:card|element|section)?$', prompt_lower)
     if add_match:
         element_name = add_match.group(1).strip()
-        return handle_add_element(element_name, existing_titles, profile)
+        if profile == 'doctoral':
+            existing_titles = [
+                'Dashboard', 'Research', 'Internships', 'Virtual Library', 
+                'Engineering Techniques', 'My Profile'
+            ]
+            return handle_add_element(element_name, existing_titles, profile)
+        return handle_add_element(element_name, ['My Courses', 'Pending Assignments to Grade', 'Upload New Course Material', 'Virtual Library'], profile)
     
-    swap_match = re.search(r'(swap|switch|exchange)\s+(.+?)\s+(?:and|with)\s+(.+)', prompt_lower)
-    if swap_match:
-        item1, item2 = swap_match.groups()[1:]
-        return handle_swap_elements(item1.strip(), item2.strip(), existing_titles, profile)
+    delete_match = re.search(r'(?:delete|remove|hide)\s+(?:the\s+)?(.+?)(?:\s+card)?$', prompt_lower)
+    if delete_match:
+        element_name = delete_match.group(1).strip()
+        if profile == 'doctoral':
+            existing_titles = [
+                'Dashboard', 'Research', 'Internships', 'Virtual Library', 
+                'Engineering Techniques', 'My Profile'
+            ]
+            return handle_delete_element(element_name, existing_titles, profile)
+        return handle_delete_element(element_name, ['My Courses', 'Pending Assignments to Grade', 'Upload New Course Material', 'Virtual Library'], profile)
     
-    color_match = re.search(r'(change|make|set)\s+(.+?)\s+(?:color\s+)?(?:to|as)\s+(red|blue|green|yellow|purple|orange|pink)', prompt_lower)
-    if color_match:
-        element, color = color_match.groups()[1:]
-        return handle_change_color(element.strip(), color.strip(), existing_titles, profile)
-    
-    move_match = re.search(r'(move|position)\s+(.+?)\s+(?:to|after|before)\s+(.+)', prompt_lower)
-    if move_match:
-        element, position = move_match.groups()[1:]
-        return handle_move_element(element.strip(), position.strip(), existing_titles, profile)
-    
-    visibility_match = re.search(r'(hide|show|display)\s+(.+)', prompt_lower)
-    if visibility_match:
-        action, element = visibility_match.groups()
-        return handle_toggle_visibility(element.strip(), action.strip() == "show", existing_titles, profile)
-    
+    # Reset layout
     if any(keyword in prompt_lower for keyword in ['reset', 'restore', 'default']):
         return handle_reset_layout(profile)
     
@@ -166,6 +157,17 @@ def analyze_admin_prompt(prompt, profile, current_layout):
 
 def handle_show_layout(current_cards, profile):
     """Show current layout"""
+    if profile == 'doctoral':
+        default_cards = [
+            {'id': 'dashboard', 'title': 'Dashboard', 'icon': 'fas fa-tachometer-alt', 'color': None, 'visible': True},
+            {'id': 'research', 'title': 'Research', 'icon': 'fas fa-microscope', 'color': None, 'visible': True},
+            {'id': 'stages', 'title': 'Internships', 'icon': 'fas fa-briefcase', 'color': None, 'visible': True},
+            {'id': 'library', 'title': 'Virtual Library', 'icon': 'fas fa-book', 'color': None, 'visible': True},
+            {'id': 'technique', 'title': 'Engineering Techniques', 'icon': 'fas fa-tools', 'color': None, 'visible': True},
+            {'id': 'profile', 'title': 'My Profile', 'icon': 'fas fa-user', 'color': None, 'visible': True}
+        ]
+        current_cards = current_cards if current_cards else default_cards
+
     visible_cards = [card for card in current_cards if card.get('visible', True)]
     if not visible_cards:
         return {
@@ -176,7 +178,8 @@ def handle_show_layout(current_cards, profile):
     card_list = []
     for i, card in enumerate(visible_cards, 1):
         color_info = f" (Color: {card.get('color', 'default')})" if card.get('color') else ""
-        card_list.append(f"{i}. {card['title']}{color_info}")
+        icon_info = f" [{card.get('icon', 'fas fa-cube')}]"
+        card_list.append(f"{i}. {card['title']}{color_info}{icon_info}")
     
     card_text = "\n".join(card_list)
     return {
@@ -186,7 +189,17 @@ def handle_show_layout(current_cards, profile):
 
 def handle_delete_element(element_name, existing_titles, profile):
     """Handle delete element request"""
-    if element_name.lower() not in existing_titles:
+    element_lower = element_name.lower()
+    existing_lower = [title.lower() for title in existing_titles]
+    
+    # Find the original case version of the title
+    original_title = None
+    for title in existing_titles:
+        if title.lower() == element_lower:
+            original_title = title
+            break
+    
+    if not original_title:
         if existing_titles:
             closest_match, score = process.extractOne(element_name, existing_titles)
             if score > 70:
@@ -207,39 +220,46 @@ def handle_delete_element(element_name, existing_titles, profile):
     
     return {
         "action": "delete_element",
-        "element": element_name,
-        "message": f"Removing '{element_name}' from your {profile} dashboard.",
-        "profile": profile
+        "element": original_title,
+        "message": f"Removing '{original_title}' from your {profile} dashboard.",
+        "profile": profile,
+        "trigger_update": True
     }
 
 def handle_add_element(element_name, existing_titles, profile):
     """Handle add element request"""
-    if element_name.lower() in existing_titles:
+    element_lower = element_name.lower()
+    existing_lower = [title.lower() for title in existing_titles]
+    
+    if element_lower in existing_lower:
+        original_title = None
+        for title in existing_titles:
+            if title.lower() == element_lower:
+                original_title = title
+                break
+                
         return {
             "action": "duplicate_element",
-            "element": element_name,
-            "message": f"'{element_name}' already exists in your {profile} dashboard.",
+            "element": original_title,
+            "message": f"'{original_title}' already exists in your {profile} dashboard.",
             "profile": profile
         }
 
-    if existing_titles:
-        closest_match, score = process.extractOne(element_name, existing_titles)
-        if score > 70:
-            return {
-                "action": "clarify_add",
-                "original_element": element_name,
-                "suggested_element": closest_match,
-                "message": f"'{element_name}' is similar to existing '{closest_match}'. Do you want to add it anyway?",
-                "profile": profile
-            }
+    element_name = ' '.join(word.capitalize() for word in element_name.split())
     
     icon_type = detect_icon_type(element_name)
     return {
         "action": "add_element",
-        "element": element_name,
-        "icon": icon_type,
+        "element": {
+            "id": element_name.lower().replace(" ", "-"),
+            "title": element_name,
+            "icon": icon_type,
+            "color": None,
+            "visible": True
+        },
         "message": f"Adding '{element_name}' card to your {profile} dashboard.",
-        "profile": profile
+        "profile": profile,
+        "trigger_update": True
     }
 
 def handle_swap_elements(item1, item2, existing_titles, profile):
@@ -362,6 +382,26 @@ def detect_icon_type(element_name):
 
 def get_help_message(profile):
     """Generate help message for the profile"""
+    if profile == 'doctoral':
+        return {
+            "action": "help",
+            "message": """I can help you manage your dashboard layout. Try these commands:
+
+            • show layout - See your current dashboard sections
+            • add [section name] - Add a new section
+            • remove [section name] - Remove a section
+            • reset layout - Restore default layout
+
+            Available sections:
+            - Dashboard
+            - Research
+            - Internships
+            - Virtual Library
+            - Engineering Techniques
+            - My Profile""",
+            "profile": profile
+        }
+    
     profile_examples = {
         'student': [
             "Add new Exams card",
@@ -386,9 +426,9 @@ def get_help_message(profile):
         ],
         'doctoral': [
             "Add Bibliography card",
-            "Remove Conferences section", 
-            "Change Data Analysis color to purple",
-            "Move Thesis Writing before Publications",
+            "Remove Research section",
+            "Change Virtual Library color to purple",
+            "Swap Internships and Research",
             "Show layout status"
         ]
     }
@@ -401,6 +441,61 @@ def get_help_message(profile):
         "message": f"I can help you customize your {profile.title()} dashboard. Try these commands:\n\n{example_text}\n\nI understand natural language, so feel free to ask in your own words!",
         "profile": profile
     }
+
+def handle_add_nav_item(item_name, existing_items, profile):
+    """Handle adding a navigation item"""
+    if item_name.lower() in [item.lower() for item in existing_items]:
+        return {
+            "action": "duplicate_nav_item",
+            "item": item_name,
+            "message": f"'{item_name}' already exists in the navigation menu.",
+            "profile": profile
+        }
+    
+    return {
+        "action": "add_nav_item",
+        "item": {
+            "id": item_name.lower().replace(" ", "-"),
+            "title": item_name,
+            "href": f"#{item_name.lower().replace(' ', '-')}",
+            "active": False
+        },
+        "message": f"Adding '{item_name}' to the navigation menu.",
+        "profile": profile
+    }
+
+def handle_delete_nav_item(item_name, existing_items, profile):
+    """Handle deleting a navigation item"""
+    if item_name.lower() not in [item.lower() for item in existing_items]:
+        return {
+            "action": "nav_item_not_found",
+            "item": item_name,
+            "message": f"I couldn't find '{item_name}' in the navigation menu. Use 'show nav' to see available items.",
+            "profile": profile
+        }
+    
+    return {
+        "action": "delete_nav_item",
+        "item": item_name,
+        "message": f"Removing '{item_name}' from the navigation menu.",
+        "profile": profile
+    }
+
+def get_nav_layout(profile):
+    """Get the default navigation layout for a profile"""
+    nav_layouts = {
+        'teacher': {
+            'items': [
+                {'id': 'dashboard', 'title': 'Dashboard', 'href': '#dashboard', 'active': True},
+                {'id': 'courses', 'title': 'My Courses', 'href': '#courses', 'active': False},
+                {'id': 'students', 'title': 'Students', 'href': '#students', 'active': False},
+                {'id': 'messages', 'title': 'Messages', 'href': '#messages', 'active': False},
+                {'id': 'library', 'title': 'Virtual Library', 'href': '#library', 'active': False}
+            ],
+            'deletedItems': []
+        }
+    }
+    return nav_layouts.get(profile, {'items': [], 'deletedItems': []})
 
 if __name__ == '__main__':
     print("Starting Admin API Server...")

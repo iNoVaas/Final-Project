@@ -1,9 +1,7 @@
-
 document.addEventListener('DOMContentLoaded', function() {
   console.log('Doctoral dashboard sync initialized');
   
   const layout = getCurrentLayout('doctoral');
-  
   applyLayoutToDashboard(layout);
   
   window.addEventListener('storage', function(e) {
@@ -33,91 +31,76 @@ document.addEventListener('DOMContentLoaded', function() {
     
     return { 
       cards: [
-        {id: 'research-project', title: 'Research Project', icon: 'fas fa-microscope', color: null, visible: true},
-        {id: 'literature-review', title: 'Literature Review', icon: 'fas fa-book-reader', color: null, visible: true},
-        {id: 'publications', title: 'Publications', icon: 'fas fa-newspaper', color: null, visible: true},
-        {id: 'supervisor-meetings', title: 'Supervisor Meetings', icon: 'fas fa-handshake', color: null, visible: true}
-      ], 
-      deletedCards: [] 
+        {id: 'dashboard', title: 'Dashboard', icon: 'fas fa-tachometer-alt', color: null, visible: true},
+        {id: 'research', title: 'Research', icon: 'fas fa-microscope', color: null, visible: true},
+        {id: 'stages', title: 'Internships', icon: 'fas fa-briefcase', color: null, visible: true},
+        {id: 'library', title: 'Virtual Library', icon: 'fas fa-book', color: null, visible: true},
+        {id: 'technique', title: 'Engineering Techniques', icon: 'fas fa-tools', color: null, visible: true},
+        {id: 'profile', title: 'My Profile', icon: 'fas fa-user', color: null, visible: true}
+      ],
+      deletedCards: []
     };
   }
   
   function applyLayoutToDashboard(layout) {
     if (!layout || !layout.cards) return;
     
-    const container = document.querySelector('.dashboard-content') || 
-                      document.querySelector('.main-container') || 
-                      document.querySelector('.research-grid');
-    
-    if (!container) {
-      console.warn('Could not find content container in the doctoral dashboard');
-      return;
+    const navMenu = document.querySelector('.nav-menu');
+    if (navMenu) {
+      navMenu.innerHTML = '';
+      
+      layout.cards.forEach(card => {
+        if (!card.visible) return;
+        
+        const navItem = document.createElement('li');
+        navItem.className = 'nav-item';
+        navItem.innerHTML = `
+          <a href="#${card.id}" class="nav-link">
+            <i class="${card.icon}"></i>
+            ${card.title}
+          </a>
+        `;
+        navMenu.appendChild(navItem);
+      });
     }
 
-    let dashboardGrid = container.querySelector('.research-items-grid');
-    if (!dashboardGrid) {
-      dashboardGrid = document.createElement('div');
-      dashboardGrid.className = 'research-items-grid';
-      dashboardGrid.style.display = 'grid';
-      dashboardGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(250px, 1fr))';
-      dashboardGrid.style.gap = '20px';
-      dashboardGrid.style.padding = '20px 0';
-      
-      container.insertBefore(dashboardGrid, container.firstChild);
-    }
-    
-    const existingCards = Array.from(dashboardGrid.children);
-    
-    dashboardGrid.innerHTML = '';
-    
     layout.cards.forEach(card => {
-      if (!card.visible) return;
-      
-      const existingCard = existingCards.find(el => {
-        return el.getAttribute('data-card-id') === card.id || 
-               el.querySelector('.item-title, h3')?.textContent.trim() === card.title;
-      });
-      
-      if (existingCard) {
-        if (card.color) {
-          existingCard.style.backgroundColor = card.color;
-          existingCard.classList.add('custom-colored');
+      const section = document.getElementById(card.id);
+      if (section) {
+        if (card.visible) {
+          section.style.display = '';
+          if (card.color) {
+            section.style.backgroundColor = card.color;
+          }
         } else {
-          existingCard.style.backgroundColor = '';
-          existingCard.classList.remove('custom-colored');
+          section.style.display = 'none';
         }
-        
-        dashboardGrid.appendChild(existingCard);
-      } else {
-        const newCard = createNewCard(card);
-        dashboardGrid.appendChild(newCard);
       }
     });
-  }
-  
-  function createNewCard(card) {
-    const cardElement = document.createElement('div');
-    cardElement.className = 'research-item';
-    cardElement.setAttribute('data-card-id', card.id);
-    
-    cardElement.style.backgroundColor = card.color || '#ffffff';
-    cardElement.style.borderRadius = '8px';
-    cardElement.style.padding = '20px';
-    cardElement.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-    
-    const iconClass = card.icon || 'fas fa-flask';
-    
-    cardElement.innerHTML = `
-      <div style="font-size: 2rem; color: #4361ee; margin-bottom: 15px;">
-        <i class="${iconClass}"></i>
-      </div>
-      <h3 class="item-title" style="margin-bottom: 10px;">${card.title}</h3>
-      <p style="color: #6c757d; margin-bottom: 15px;">Manage your ${card.title.toLowerCase()}</p>
-      <a href="#${card.id}" style="color: #4361ee; text-decoration: none; display: flex; align-items: center;">
-        View details <i class="fas fa-chevron-right" style="margin-left: 5px;"></i>
-      </a>
-    `;
-    
-    return cardElement;
+
+    const statsContainer = document.querySelector('.stats-container');
+    if (statsContainer && layout.cards.find(card => card.id === 'dashboard' && card.visible)) {
+      statsContainer.style.display = '';
+    }
+
+    const stagesContainer = document.querySelector('.stages-container');
+    if (stagesContainer && layout.cards.find(card => card.id === 'stages' && card.visible)) {
+      stagesContainer.style.display = '';
+    }
+
+    const libraryCategories = document.querySelector('.library-categories');
+    if (libraryCategories && layout.cards.find(card => card.id === 'library' && card.visible)) {
+      libraryCategories.style.display = '';
+    }
+
+    const techniqueContainer = document.querySelector('.technique-container');
+    if (techniqueContainer && layout.cards.find(card => card.id === 'technique' && card.visible)) {
+      techniqueContainer.style.display = '';
+    }
+
+    const profileContainer = document.querySelector('.profile-container');
+    if (profileContainer && layout.cards.find(card => card.id === 'profile' && card.visible)) {
+      profileContainer.style.display = '';
+    }
   }
 });

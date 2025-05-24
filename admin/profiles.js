@@ -27,10 +27,12 @@ document.addEventListener('DOMContentLoaded', function() {
       {id: 'prime', title: 'Prime de Rendement', icon: 'fas fa-award', color: null, visible: true}
     ],
     doctoral: [
-      {id: 'research-project', title: 'Research Project', icon: 'fas fa-microscope', color: null, visible: true},
-      {id: 'literature-review', title: 'Literature Review', icon: 'fas fa-book-reader', color: null, visible: true},
-      {id: 'publications', title: 'Publications', icon: 'fas fa-newspaper', color: null, visible: true},
-      {id: 'supervisor-meetings', title: 'Supervisor Meetings', icon: 'fas fa-handshake', color: null, visible: true}
+      {id: 'dashboard', title: 'Dashboard', icon: 'fas fa-tachometer-alt', color: null, visible: true},
+      {id: 'research', title: 'Research', icon: 'fas fa-microscope', color: null, visible: true},
+      {id: 'stages', title: 'Internships', icon: 'fas fa-briefcase', color: null, visible: true},
+      {id: 'library', title: 'Virtual Library', icon: 'fas fa-book', color: null, visible: true},
+      {id: 'technique', title: 'Engineering Techniques', icon: 'fas fa-tools', color: null, visible: true},
+      {id: 'profile', title: 'My Profile', icon: 'fas fa-user', color: null, visible: true}
     ]
   };
   function getCurrentLayout(profile) {
@@ -198,6 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const msgLower = message.toLowerCase();
     let responseText = '';
     chatMessages.removeChild(loadingDiv);
+
     if (msgLower === 'show layout') {
       if (currentLayout.cards.length === 0) {
         responseText = `Your ${currentProfile} dashboard is currently empty. You can add cards using commands like 'Add new [card name]'.`;
@@ -206,7 +209,8 @@ document.addEventListener('DOMContentLoaded', function() {
           .filter(card => card.visible)
           .map((card, i) => {
             const colorInfo = card.color ? ` (Color: ${card.color})` : '';
-            return `${i + 1}. ${card.title}${colorInfo}`;
+            const iconInfo = ` [${card.icon}]`;
+            return `${i + 1}. ${card.title}${colorInfo}${iconInfo}`;
           })
           .join('\n');
         responseText = `Current ${currentProfile} Dashboard Layout:\n\n${cardList}\n\nTotal: ${currentLayout.cards.filter(card => card.visible).length} cards`;
@@ -216,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const newCard = {
         id: cardName.toLowerCase().replace(/\s+/g, '-'),
         title: cardName,
-        icon: 'fas fa-cube',
+        icon: detectIconType(cardName),
         color: null,
         visible: true
       };
@@ -261,6 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       responseText = `I'm sorry, but I don't understand that command. Try "show layout", "add [card name]", "remove [card name]", or "swap [card1] and [card2]".`;
     }
+
     const botMessageDiv = document.createElement('div');
     botMessageDiv.className = 'message bot';
     botMessageDiv.innerHTML = `
@@ -270,6 +275,27 @@ document.addEventListener('DOMContentLoaded', function() {
     chatMessages.appendChild(botMessageDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
+  function detectIconType(cardName) {
+    const iconMap = {
+      'dashboard': 'fas fa-tachometer-alt',
+      'research': 'fas fa-microscope',
+      'internship': 'fas fa-briefcase',
+      'stages': 'fas fa-briefcase',
+      'library': 'fas fa-book',
+      'technique': 'fas fa-tools',
+      'engineering': 'fas fa-tools',
+      'profile': 'fas fa-user',
+      'default': 'fas fa-cube'
+    };
+
+    const nameLower = cardName.toLowerCase();
+    for (const [key, value] of Object.entries(iconMap)) {
+      if (nameLower.includes(key)) {
+        return value;
+      }
+    }
+    return iconMap.default;
+  }
   function processResponse(data, chatMessages, iconMap) {
     const botMessageDiv = document.createElement('div');
     botMessageDiv.className = 'message bot';
@@ -278,21 +304,23 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="message-content">${data.message}</div>
     `;
     chatMessages.appendChild(botMessageDiv);
+    
     if (data.action) {
       const currentLayout = getCurrentLayout(currentProfile);
+      
       switch (data.action) {
         case 'add_element':
-          const newCard = {
-            id: data.element.toLowerCase().replace(/\s+/g, '-'),
-            title: data.element,
-            icon: data.icon || 'fas fa-cube',
-            color: null,
-            visible: true
-          };
-          currentLayout.cards.push(newCard);
+          currentLayout.cards.push(data.element);
           saveLayout(currentProfile, currentLayout);
-          updateDashboardHTML(currentProfile, currentLayout);
+          if (data.trigger_update) {
+            localStorage.setItem('dashboard_update_trigger', JSON.stringify({
+              action: 'add_element',
+              element: data.element,
+              profile: currentProfile
+            }));
+          }
           break;
+          
         case 'delete_element':
           const cardIndex = currentLayout.cards.findIndex(
             card => card.title.toLowerCase() === data.element.toLowerCase()
@@ -301,41 +329,34 @@ document.addEventListener('DOMContentLoaded', function() {
             const removedCard = currentLayout.cards.splice(cardIndex, 1)[0];
             currentLayout.deletedCards.push(removedCard);
             saveLayout(currentProfile, currentLayout);
-            updateDashboardHTML(currentProfile, currentLayout);
+            if (data.trigger_update) {
+              localStorage.setItem('dashboard_update_trigger', JSON.stringify({
+                action: 'delete_element',
+                element: data.element,
+                profile: currentProfile
+              }));
+            }
           }
           break;
-        case 'swap_elements':
-          const index1 = currentLayout.cards.findIndex(
-            card => card.title.toLowerCase() === data.elements[0].toLowerCase()
-          );
-          const index2 = currentLayout.cards.findIndex(
-            card => card.title.toLowerCase() === data.elements[1].toLowerCase()
-          );
-          if (index1 >= 0 && index2 >= 0) {
-            [currentLayout.cards[index1], currentLayout.cards[index2]] = 
-              [currentLayout.cards[index2], currentLayout.cards[index1]];
-            saveLayout(currentProfile, currentLayout);
-            updateDashboardHTML(currentProfile, currentLayout);
-          }
+          
+        case 'show_layout':
           break;
-        case 'change_color':
-          const cardToColorIndex = currentLayout.cards.findIndex(
-            card => card.title.toLowerCase() === data.element.toLowerCase()
-          );
-          if (cardToColorIndex >= 0) {
-            currentLayout.cards[cardToColorIndex].color = data.color;
-            saveLayout(currentProfile, currentLayout);
-            updateDashboardHTML(currentProfile, currentLayout);
-          }
-          break;
+          
         case 'reset_layout':
           currentLayout.cards = defaultLayouts[currentProfile] || [];
           currentLayout.deletedCards = [];
           saveLayout(currentProfile, currentLayout);
-          updateDashboardHTML(currentProfile, currentLayout);
+          if (data.trigger_update) {
+            localStorage.setItem('dashboard_update_trigger', JSON.stringify({
+              action: 'reset_layout',
+              layout: currentLayout,
+              profile: currentProfile
+            }));
+          }
           break;
       }
     }
+    
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
   function updateDashboardHTML(profile, layout) {
@@ -345,13 +366,15 @@ document.addEventListener('DOMContentLoaded', function() {
       layout: layout
     }));
   }
-  for (const profile in defaultLayouts) {
-    if (!localStorage.getItem(`${profile}_layout`)) {
+  function initializeLayouts() {
+    Object.keys(defaultLayouts).forEach(profile => {
+      localStorage.removeItem(`${profile}_layout`);
       saveLayout(profile, {
         cards: defaultLayouts[profile],
         deletedCards: []
       });
-    }
+    });
   }
+  initializeLayouts();
   console.log('Profile navigation and dashboard management initialized!');
 });
